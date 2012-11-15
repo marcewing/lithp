@@ -1,0 +1,1388 @@
+
+
+
+                                 Lithp
+                             version 3.0a
+
+
+                              User Manual
+                                  and
+                            Quick Tutorial
+
+
+
+
+                          (c) 1989 Marc Ewing
+
+
+
+                           Manual revision 1
+
+
+
+
+
+                           COPYRIGHT NOTICE
+
+
+   This software, the program, source files, and documentation are
+   all copyright 1989 by Marc Ewing, the author of the Lithp
+   software.  All rights are reserved except those explicitly stated
+   in this copyright notice.
+
+
+
+   In order to encourage the free trade of software and to encourage
+   the programming industry to share resources, I am marketing this
+   software under a scheme I have devised called CodeWare.  You may
+   freely copy this software as many times as you wish and you may
+   distribute these copies to anyone without paying any money.
+   However, if you like the software, find it educational or use it
+   frequently you must do one of two things.  If you are a
+   programmer you must send an equivalent amount of code to the
+   author(s) of the software.  If you are non-programmer you must
+   send something you think might be interesting and educational to
+   the author(s) of the software.  This might be a puzzle, a tape of
+   original music, some text on anything, an original story, a
+   picture, or just about anything that might be construed as
+   bizarre, preferably creative.
+
+   When copied and distributed, this software MUST be unaltered and
+   MUST be distributed with all the associated files and
+   documentation.  Further, this copyright notice MUST be intact.
+   Altered versions of this software must be cleared with the
+   author(s) before distribution.
+
+   The sole exception to these usage, copying and distribution terms
+   is the case of use for commercial purposes.  This software shall
+   not be used, either alone or in conjunction with other products
+   or software, for commercial purposes of any kind.  Any commercial
+   interest in the software must be directed to the author(s) of the
+   software.
+
+
+
+   I make no claims as to the reliability or performance of this
+   software.  In no event shall I be liable for loss of profit or
+   commercial damage due to use of this software; in any case this
+   would be a violation of the usage terms stated above.  Any damage
+   resulting from the use of this software is the sole
+   responsibility of the user.
+
+
+                         Alpha Version Notice
+
+
+   Hey alpha testers:
+
+   This being an alpha release of Lithp, there will be numerous
+   changes made to the code before even progressing to beta status.
+   Most changes will be small corrections or additions to the code
+   but there might be some changes that would change the entire
+   structure of the program.  These major revisions will, of course,
+   go through complete alpha testing.
+
+   Please do not distribute this version to anyone without asking me
+   first.  I'd like to keep the early handicapped versions away from
+   the public.  Also the copyright notice may change over time and
+   this may become a commercial product - to a limited extent.
+
+   If you find bugs, document them right away.  If you can fix them
+   go ahead, but document the correction and send it to me right
+   away so I can eval it and get it out to other alpha testers.  At
+   this point we should try not to deviate too far from Common Lisp.
+   You should compile all bug notices, suggestions, fixes,
+   enhancements and so forth and send them to me periodically and
+   I'll do the same.  Don't forget that the documentation needs work
+   too.
+
+   As far as the large program changes go, I will let you know ahead
+   of time what kind of stuff I am considering so you can comment.
+
+   Thanks for all your help,
+
+   Marc
+
+
+
+
+                                 INTRO
+
+
+   Lithp is a small lisp interpreter written completely in Pascal.
+   It is basically a subset of Common Lisp (one might say
+   (subset Lithp Common_Lisp) evaluates to T) and most of the
+   functions found in Lithp can be found in Common Lisp.  The few
+   additions made to Lithp are there to make playing more
+   interesting for the programmer (so, in fact (subset Lithp
+   Common_Lisp) evaluates to NIL).
+
+   Since Lithp is written a very accessible high level language, it
+   should be very easy to make additions/adjustments/
+   customizations, indeed, this is half the fun and I encourage it.
+   As per the copyright notice, you may do this for your own
+   personal use.  Altered versions of Lithp must be cleared with me
+   before being released to the general public.  Of course,
+   unaltered versions may be distributed freely.
+
+   You can contact me in a number of ways:
+
+   Marc Ewing
+   5621 Melvin St
+   Pittsburgh, PA
+   15217, USA
+
+   (412) 521 8452
+   (eastern time - so all you west coast surfin' types try not to
+   call me after Midnight my time)
+
+   Or on any one of the educational/military networks (InterNet,
+   BitNet, UseNet and so forth) as:
+   me12@andrew
+   me12+@andrew
+   or some similar variation depending on the network.
+
+   I have made a considerable effort to make Lithp as bug-free as
+   possible but I am 99+44/100% sure that there are other errors
+   lurking in this code.  I believe that Lithp will work properly on
+   Lithp code that is error free.  BUT (and this is a big but!) if a
+   user types in Lithp code that has an error somewhere in it or if
+   an error develops in the Lithp code as it is being evaluated, the
+   Lithp interpreter may act unpredictably (read: system could
+   crash).  In addition the reader can be very picky when reading in
+   Real or Rational data types - try to control yourself when
+   inputting these.  Other peculiarities will be noted in the
+   documentation at the point where they are particularly peculiar.
+
+
+                              LIST BASICS
+
+
+   Before beginning, a few notes about lisp are in order.  Lisp
+   stands for LISt Processor, this is sensible because it likes to
+   play with lists of things.  A list is typed in the form:
+
+   (1 4.3 ... -3 "Lisa is a big buffoon")
+
+   Note there are no commas.  The items in a list can actually be
+   lists themselves.  So ("Your mama" ("is an" "arachnid")) is also
+   a list.  This can go on ad infinitum.  The parentheses must match
+   and must come in the proper sequence.  For example (this is not
+   (a list)  and  )this either(  are not lists.
+
+
+                              DATA TYPES
+
+
+   The basic lisp data type is the atom.  An atom is basically one
+   thing by itself.  There are many types of atoms: integers,
+   floats, strings, ratios and symbols.  Symbols are just words or
+   characters and so forth.  A single symbol can have no spaces in
+   it and must be no longer that 80 characters.  A string must begin
+   and end with double quotes - " and can be no longer than 80
+   characters.  The valid integer range is -32768 to 32767.  The
+   valid float range is 2.9e-39 to 1.7e38 and must appear with a
+   decimal point in it to be recognized as a float.  Lastly, a ratio
+   is the ratio of two integers and must be typed as an integer
+   followed by a "/" followed by another integer to be recognized as
+   a ratio.  There is one other type of data, the cons.  A cons, or
+   a cons cell as they are generally called, contains two pointers
+   that can point to other data elements, which may themselves be
+   cons cells.  The two pointers are called the CAR and the CDR.  A
+   cons is used to represent a list.  The CAR of a cons points to
+   the first element of the list and the CDR points to the rest of
+   the list.  If a list is more than one element long, the rest of
+   the list is another list.  So a list is broken down into its
+   first element and the rest of the list.  If the list is only one
+   element long, the CAR points to the element and the CDR points to
+   NIL.
+
+   NIL is basically nothing, it signifies the end of a list.  To be
+   more specific, NIL is an empty list.  So for the last element of
+   a list, the CDR (that is the rest of the list) is the empty list.
+   In lisp NIL is a list and an atom so both (LISTP NIL) and (ATOM
+   NIL) would return T, which brings us to another point.  In order
+   to work with boolean (true - false) values lisp adopts the
+   following convention;  NIL is false and anything else is true.
+   Lisp also provides us with a generic true atom, T.  You can not
+   change the value of either NIL or T.  Some predicate functions
+   will return T for true and some others will return something more
+   meaningful for true.  All, however, will return NIL for false.
+   As examples (AND T 2.3) and (OR NIL "test") will return T and
+   "test" respectively, both meaning true.
+
+
+                             GENERAL INFO
+
+
+   Lisp expressions are written in pre-fix form.  In everyday
+   practice, we write expressions in in-fix form: 4+5.  The operator
+   get put in between the operands.  In prefix form the operator
+   comes first: + 4 5.  Since lisp likes lists we enter an
+   expression as a list of an operator and operands, in computer
+   terms, a function and parameters (or arguments).  So the above
+   expression, in lisp, would be (+ 4 5).
+
+   What lisp does, at the most general sense, is evaluate
+   expressions.  If we typed in (+ 4 5) lisp would evaluate it and
+   return 9.  But it is a little more complicated than that.  The
+   arguments to functions are (in general) evaluated themselves.  So
+   we could type something like (+ (* 3 2) 5) and lisp would return
+   11.  Lisp first evaluates the two arguments to +.  The second, 5,
+   evaluates to itself but the first is an expression in it self, so
+   lisp evaluates it.  (* 3 2) has two arguments that evaluate to
+   themselves and the function returns 6.  So we have two arguments
+   to + now: 6 and 5.  Now lisp applies the + function and returns
+   11.  Evaluation is covered more in the next section.
+
+
+                         READ-EVAL-PRINT LOOP
+
+
+   When Lithp runs it is usually in a process called a read-eval-
+   print loop.  Lithp reads in an expression from the user,
+   evaluates it, prints out the result, and repeats the whole
+   process again.  The loop presents a prompt to the user like
+
+   0:0:>
+
+   The prompt tells the user a few things about the state of the
+   reader and the interpreter.  The first number tells you what
+   error level you are working at.  It starts at 0, the lowest
+   level.  When you make an error, the interpreter jumps into
+   another error loop and the error level goes up.  From here you
+   can examine things and hopefully correct the problem.  More on
+   error loops later.  The second number tells you haw many left
+   parentheses remain unclosed.  This can be really helpful when
+   entering large expressions with many nested levels of lists.
+
+   A few notes on the reader.  The reader will accept "standard"
+   text like numbers and letters and so forth.  If you make a
+   mistake you can use <backspace> to erase it.  If you get
+   completely lost and fear that you will never escape the inner
+   depths of nested expressions, you can hit <esc> and all will be
+   well.  The input is terminated, and you are given a new prompt.
+   You can also use <tab> which will throw in 10 spaces for you.  As
+   previously stated, the reader is pretty testy so don't make it
+   mad or it will make your life one living hell.
+
+   And now onto the biggie: the evaluator.  Eval is the very heart
+   of Lithp.  Eval operates in a few different ways, depending on
+   the expression you give it.
+
+   Integers, reals, rationals, strings, T and NIL all evaluate to
+   themselves.
+
+   A symbol, if defined, will evaluate to its value.
+
+   If the expression is a list eval does the following.  If the
+   first element is list, and the first element of that is LAMBDA,
+   it is assumed to be a lambda expression.  This lambda expression
+   is evaluated with the rest of the list as arguments.  If the
+   expression is a symbol it is checked against the user defined
+   macros and functions.  If one is found, the lambda expression
+   associated with that symbol is evaluated with the rest of the
+   list as parameters.  If definition is found, eval checks the
+   internal function list and if a match is found the function is
+   performed with the rest of the list as arguments.  At this point
+   if no function has been found an error occurs and you are
+   teleported into the mystical world of the Lithp Debugger.
+
+   So that is the way eval works.  The next section will describe
+   functions and macros and lambda expressions in case all the above
+   was meaningless to you.
+
+
+              FUNCTIONS AND MACROS AND LAMBDA EXPRESSIONS
+
+
+   Functions and macros (other than the internal pre-defined ones)
+   are implemented using lambda notation.  A typical lambda
+   expression look like this:
+
+   (LAMBDA (X) (CAR (CDR X)))
+
+   It begins with the symbol LAMBDA and is followed by a (possibly
+   empty) argument list and then the code of the function.  This
+   lambda expression is a function that takes one argument X, and
+   returns the second element of X using (CAR (CDR X)).  Now you
+   can't do anything with this alone (except assign it to the
+   symbol-function part of a symbol).  A lambda expression may be
+   inserted as the first element of a list, the rest of the list
+   being arguments to the lambda expression.  For example:
+
+   ((LAMBDA (X) (CAR (CDR X))) '(1 2 3))
+
+   typed in at the Lithp prompt will return
+
+   2
+
+   the second element of the list.  How did this work?  Well the
+   lambda expression described above takes one argument X, in the
+   case the supplied argument is (1 2 3) (ignore the ' for now, it
+   will be explained later).  The function then evaluates (CDR X)
+   and gets (2 3) and then evaluates (CAR (2 3)) and gets 2.  Very
+   simple.
+
+   Say we have a neat function that does something useful and that
+   we might want to use many times.  It would be a real pain to have
+   to type the lambda definition of the function every time we
+   wanted to use it.  Lisp lets us define functions and assign names
+   to them using DEFUN.  Take the above definition, for example.
+
+   (DEFUN SECOND (X) (CAR (CDR X)))
+
+   The above, typed at the prompt, would give the result
+
+   SECOND
+
+   This is Lithp's way of telling us that a function named SECOND
+   has been defined.  Now we can type SECOND in place of the whole
+   lambda expression and get the same results.
+
+   (SECOND '(1 2 3))
+
+   will return
+
+   2
+
+   Boy isn't that handy!  On to macros.  A macro is very much like a
+   function with a few exceptions.  A macro takes arguments and
+   creates a new Lisp expression which is then evaluated.  For
+   example:
+
+   (DEFMACRO HEAD (X) `(CAR ,X))
+
+   Will define a macro called HEAD that will return the first
+   element of a list (again, ignore the ` and ,).  When we type
+
+   (HEAD '(A B C))
+
+   eval performs a process called macro expansion.  The argument to
+   HEAD is '(A B C), arguments to macros are not evaluated.  The
+   HEAD macro then returns an expression (CAR '(A B C)) which is
+   constructed from the macro definition.  This expression is then
+   evaluated to get the final result, A.  Believe it or not, macros
+   can be useful now and then.
+
+   So when eval sees a symbol at the head of a list that is defined
+   as a macro or a function, that symbol is replaced with the lambda
+   expression and the lambda expression, with arguments, is
+   evaluated.
+
+
+                            QUOTES AND SUCH
+
+
+   As shown above, arguments to functions are evaluated and those to
+   macros are not.  How do we pass a list of names, say, to a
+   function?  If we typed (CAR (JIM JOE JAK)), CAR would first try
+   to evaluate (JIM JOE JAK) and unless JIM is defined as either a
+   macro or a function, we would get an error and in any case this
+   is surely not what we wanted.  Somehow we have to keep Lithp from
+   evaluating that argument.  We can do that by using the function
+   QUOTE which just returns its argument unevaluated.
+
+   (CAR (QUOTE (JIM JOE JAK)))
+
+   Will give us JIM, the answer we wanted.  CAR evaluates its
+   argument (QUOTE (JIM JOE JAK)), which just evaluates to (JIM JOE
+   JAK), and then takes the first element of it JIM.  As a
+   shorthand, the reader will let us type (CAR '(JIM JOE JAK)) and
+   it will expand it into the full statement.  So that's what the '
+   was about up there.
+
+   What about the ` and the ,?  Well `x is shorthand for (BACKQUOTE
+   x), same as ' and it does the same things as ' and more.  If
+   there is an element in a backquoted list that is preceded by a
+   "," (which is actually a shorthand for (COMMA __)), that one
+   element is evaluated inside the list.  Another feature is ",@",
+   which of course is shorthand for (COMMA-AT __).  ,@ will force
+   the following expression to be evaluated and, if it is a list, to
+   be spliced into the big list.  All of the above are demonstrated
+   in the following expression, typed at the prompt.
+
+   `(A (1 2) ,(CDR '(Z X Y)) ,@(CDR '(J K L)))
+
+   What does this evaluate to?  The backquote means don't evaluate
+   it but check for COMMA's and COMMA-AT's.  The third element has a
+   comma in front of it so it is evaluated.  (CDR '(Z X Y))
+   evaluates to (X Y), remembering the QUOTE convention.  The fourth
+   element is preceded by a ,@ so it is evaluated and, if possible,
+   spliced into the whole list.  (CDR '(J K L)) evaluates to (K L).
+   So the resulting list should be
+
+   (A (1 2) (X Y) K L)
+
+   which in fact it is.  Most functions will want to evaluate their
+   arguments and you will find yourself using ' very often.
+
+
+                           SYMBOLS AND SUCH
+
+
+   A symbol can have many things associated with it, a value, a
+   function, a macro, and a property list.  The value of a symbol
+   can be set using any of the setting functions.  The same goes for
+   the function, macro and property list, but these generally use
+   special setting functions to set them.  A property list is a list
+   of things called properties and values of those properties.  One
+   example of a property might be COLOR and a value might be BLUE.
+   Using SETPROP and REMPROP we can make up and play with the
+   properties of a symbol.  Although you don't need to know what a
+   property list looks like to use one, it is helpful.  A property
+   is a flat linear list consisting of a property name and its value
+   and then another name and value and so on.  A few examples:
+
+   (COLOR BLUE SIZE XXL STYLE T-SHIRT)
+
+   () (which is just NIL)
+
+   (LENGTH 10 SPEED 100)
+
+   All property lists are initially NIL.
+
+
+                           ASSOCIATION LISTS
+
+
+   An association list is like a property list in that it is used to
+   store values all in one place.  The difference is that each name-
+   value pair are stored together in a list.  For example:
+
+   ((COLOR BLUE) (SIZE XXL))
+
+   ((3 (D NIL ((E) L))) (WHERE ("at home" "in bed")))
+
+   are assoc lists.  Using association list functions we can extract
+   data from these lists.  For example:
+
+   (ASSOC 3 '((3 (D NIL ((E) L))) (WHERE ("at home" "in bed"))))
+
+   returns
+
+   (3 (D NIL ((E) L)))
+
+   the part of the list whose first element matches the provided
+   argument, 3.
+
+
+                            A NOTE ON SCOPE
+
+
+   Scope is the way in which you may use variables when in different
+   parts of a program.  When deeply nested in the depths of a
+   function called from another function called from another
+   function, you may only use certain variables.  At the top level
+   are symbols that are defined at the prompt using SETQ.  These are
+   global variables that can be used anywhere unless they are
+   blocked by other variables.  Blocking occurs when, within a
+   function or a control structure, another variable of the same
+   name is created.  Within that structure you can only use the
+   recently created variable and the global one is blocked - you can
+   not access it.  The above is true for both kinds of scoping used
+   in Lithp, lexical and dynamic.  Lithp starts with lexical scoping
+   meaning you can only use global and immediately local variables
+   (taking into account blocking).  An immediately local variable
+   is, for example, the parameters of a function or macro within
+   that function or macro or the variables created in a let/prog/do
+   within that let/prog/do.  If you switch to dynamic scoping you
+   can use the most recently created variable of any symbol.  This
+   means if the symbol you want was created in the function that
+   just called the function you are in, you can use it even though
+   it is not immediately local.  Note that this scoping only comes
+   into play during the evaluation of an expression.  When you are
+   typing at the prompt, you are at the global level and you only
+   have access to global variables - all others are undefined.  One
+   more thing.  Any SETQ or setting function that sets the value of
+   a symbol that has never been defined before, no matter how deeply
+   nested that SETQ is, defines the symbol as global.
+
+
+                  A QUICK DESCRIPTION OF THE DEBUGGER
+
+
+   When you make an error, Lithp will enter an error loop called the
+   debugger.  It will give you an error message, display the
+   offending code, and it will display some code that it will try to
+   re-evaluate after you finish debugging (if it doesn't work you
+   get put right back into the debugger).  You can type any Lithp
+   expression at the debug level that you can type at the regular
+   level, plus a few more.  You can type (CONTINUE) and Lithp will
+   try to re-evaluate the code it displayed with the error message.
+   You can type (EXIT <arg>) and Lithp will substitute the value of
+   <arg> for the value of the continue expression.  You can also
+   look at the evaluation stack by typing (EVALSTACK).  This will
+   show you haw eval came to find the error.  If you get fed up, you
+   can type (TOP) and you will be put back in the top level.
+
+
+                               GOOD LUCK
+
+
+   You are now equipped with the basics and are ready to play around
+   with the Lithp interpreter.  You will learn a lot more about
+   Lithp by using it than you have learned from these pages.  The
+   following is a list of descriptions of the pre-defined functions,
+   available in Lithp.  You can use these to build your own
+   functions using DEFUN and DEFMACRO.  A few notes first.  A valid
+   symbol is any symbol other than NIL or T.  A non-empty list is
+   any list other that NIL.  Brackets [ ] around something means
+   that part is optional.  A * after something means that part may
+   be repeated as many times as you wish.
+
+
+                LIST CONSTRUCTION/EXTRACTION FUNCTIONS
+
+
+   (CAR <arg>)
+   (FIRST <arg>):      <arg> is evaluated 
+                  Params: <arg> must be a non-empty list
+                  Result: Returns first element of the list
+
+   (CDR <arg>)
+   (REST <arg>):       <arg> is evaluated
+                  Params: <arg> must be a non-empty list
+                  Result: Returns the list without the first element
+
+   (C....R <arg>):     .... represents any sequence of up to four
+                  A's and/or D's
+                  <arg> is evaluated
+                  Params: <arg> must be a list
+                  Result: Returns the result of taking cdr's and/or
+                          car's of <arg> corresponding to the  
+                          sequence of A's and D's 
+
+   (LAST <arg>):       <arg> is evaluated
+                  Params: <arg> must be a non-empty list
+                  Result: Returns a list of the last element
+
+   (BUTLAST <arg>):    <arg> is evaluated
+                  Params: <arg> must be a list
+                  Result: Returns <arg> without the last element
+
+   (LIST <arg>*):      <arg>* are evaluated 
+                  Params: <arg>* can be any type
+                  Result: Returns a list of <arg>*
+
+   (APPEND <arg>*):    <arg>* are evaluated
+                  Params: <arg>* must be lists
+                  Result: Returns a list of all elements of each
+                          <arg>* 
+
+   (NCONC <arg>*):     <arg>* are evaluated
+                  Params: <arg>* must be lists
+                  Result: Like APPEND but the last CDR of each list
+                          is destructively changed to point to the
+                          next list
+
+   (CONS <arg1> <arg2>):
+                  <arg1> <arg2> are evaluated
+                  Params: <arg2> must be a list
+                          <arg1> can be any type 
+                  Result: Returns a list with <arg1> as the car and
+                          <arg2> as the cdr 
+
+   (LIST* <argi>*):    <argi>* are evaluated
+                  Params: <arg1>..<arg(i-1)> can be any type
+                          <argi> must be a list 
+                  Result: Returns the list made by consing     
+                          <arg1>..<arg(i-1)> onto <argi> 
+
+   (NTH <arg1> <arg2>):
+                  <arg1> <arg2> are evaluated 
+                  Params: <arg1> must be an integer 
+                          <arg2> must be a list
+                  Result: Returns the <arg1>th of <arg2>
+
+   (NTH <arg1> <arg2>):
+                  <arg1> <arg2> are evaluated
+                  Params: <arg1> must be an integer
+                          <arg2> must be a list 
+                  Result: Returns the result of taking <arg1> cdr's
+                          of <arg2> 
+
+   (LIST-LENGTH <arg>):
+                  <arg> is evaluated
+                  Params: <arg> must be a list
+                  Result: Returns the integer length of <arg>
+
+   (REVERSE <arg>):    <arg> is evaluated
+                  Params: <arg> can be any type
+                  Result: If <arg> is a list, a list with <arg>'s
+                          elements reversed is returned.  Otherwise,
+                          <arg> is returned 
+
+   (RPLACA <arg1> <arg2>):
+                  <arg1> <arg2> are evaluated
+                  Params: <arg1> must be a non-empty list
+                          <arg2> can be any type 
+                  Result: The CAR of <arg1> is destructively changed
+                          to point to <arg2> 
+
+   (RPLACD <arg1> <arg2>):
+                  <arg1> <arg2> are evaluated
+                  Params: <arg1> must be a non-empty list
+                          <arg2> must be a list 
+                  Result: The CDR of <arg1> is destructively changed
+                          to point to <arg2> 
+
+   (DELETE <arg1> <arg2>):
+                  <arg1> <arg2> are evaluated
+                  Params: <arg2> must be a list
+                          <arg1> can be any type 
+                  Result: Destructively removes elements in <arg2>
+                          that match <arg1> 
+
+   (REMOVE <arg1> <arg2>):
+                  <arg1> <arg2> are evaluated
+                  Params: <arg2> must be a list
+                          <arg1> can be any type 
+                  Result: Returns a copy of <arg2> without elements
+                          that match <arg1> 
+
+   (COPY-LIST <arg>):  <arg> is evaluated
+                  Params: <arg> can be any type
+                  Result: Returns a copy of <arg>)
+
+   (ASSOC <arg> <assoc-list>):
+                  <arg> <assoc-list> are evaluated
+                  <assoc-list> is a valid association list of the
+                  form ([(<ob1> <ob2>)*]) where <ob1> <ob2> are any
+                  type
+                  Result: If found, returns the list element of
+                          <assoc-list> that has <arg> as <ob1>,
+                          otherwise returns NIL
+
+   (PAIRLIS <arg1> <arg2>):
+                  <arg1> <arg2> are evaluated
+                  Params: <arg1> <arg2> must be lists
+                  Result: Returns an association list formed by
+                          pairing elements of <arg1> and <arg2>
+
+
+                         COMPARISON FUNCTIONS
+
+
+   =                   : equal
+   /= , =/ , <>        : not equal
+   >= , =>             : greater than or equal
+   <= , =<             : less than or equal
+   >                   : greater than
+   <                   : less than
+
+   (<op> <arg1> <arg2>):
+                       <op> represents one of the above comparisons
+                       <arg1> <arg2> are evaluated
+                       Params: <arg1> <arg2> must not be lists and
+                               must be of the same type 
+                       Result: Returns T if the comparison is true,
+                               otherwise returns NIL 
+
+   (EQ <arg1> <arg2>): <arg1> <arg2> are evaluated
+                       Params: <arg1> <arg2> can be any type
+                       Result: Returns T if <arg1> and <arg2> are
+                               the same item, otherwise returns NIL
+
+   (EQL <arg1> <arg2>):
+                       <arg1> <arg2> are evaluated
+                       Params: <arg1> <arg2> can be any type 
+                       Result: Returns T if <arg1> and <arg2> are
+                               equivalent items, otherwise returns
+                               NIL 
+
+
+                           SETTING FUNCTIONS
+
+
+   (DEFUN <sym> <arglist> <arg>*):
+                       Params: <sym> must be a valid symbol
+                               <arglist> is a list of arguments
+                               which must be valid symbols 
+                               <arg>* can be any type
+                       Result: Returns <sym>.  Sets the function
+                               <sym>.
+
+   (DEFMACRO <sym> <arglist> <arg>*):
+                       Params: <sym> must be a valid symbol
+                               <arglist> is a list of arguments
+                               which must be valid symbols
+                               <arg>* can be any type
+                       Result: Returns <sym>.  Sets the macro <sym>.
+
+   (SETQ [<sym> <arg>]*):
+                       <arg> is evaluated
+                       Params: <sym> must be a valid symbol
+                               <arg> can be any type
+                       Result: Returns the last <arg>.  The value of
+                               each <sym> is set to <arg>.
+
+   (SET [<sym> <arg>]*):
+                       <sym> <arg> are evaluated
+                       Params: <sym> must be a valid symbol
+                               <arg> can be any type
+                       Result: Returns the last <arg>.  The value of
+                  <arg> is evaluated
+                  Params: the type of <arg> depends on <place>
+                          <place> must be one of the following:
+                          <symbol>
+                          (CAR <item>)
+                          (CDR <item>)
+                          (LAST <item>)
+                          (SYMBOL-VALUE <item>)
+                          (SYMBOL-PLIST <item>)
+                          (SYMBOL-FUNCTION <item>)
+                          (SYMBOL- MACRO <item>)
+                          In case 3 and 4, <arg> must be a list, in
+                          case 6 it must be a property list and in
+                          cases 7 and 8 it must be a lambda
+                          expression.  For other cases <arg> may be
+                          any type.
+                  Result: <arg> is returned.  Things are set so that
+                          when <place> is evaluated in the future,
+                          the result will be <arg>.
+
+
+                      GENERAL PREDICATE FUNCTIONS
+
+
+   (NOT <arg>)
+   (NULL <arg>):       <arg> is evaluated
+                       Params: <arg> can be any type
+                       Result: Returns T if <arg> is NIL, otherwise
+                               returns NIL
+
+   (BOUNDP <arg>):     <arg> is evaluated
+                       Params: <arg> must be a symbol
+                       Result: Returns T if <arg> is bound to some
+                               value
+
+   (ATOM <arg>):       <arg> is evaluated
+                       Params: <arg> can be any type
+                       Result: Returns T if <arg> is not a cons (ie
+                               an atom), otherwise returns NIL 
+
+   (CONSP <arg>):      <arg> is evaluated
+                       Params: <arg> can be any type 
+                       Result: Returns T if <arg> is a cons (ie not
+                               an atom), otherwise returns NIL 
+
+   (LISTP <arg>):      <arg> is evaluated
+                       Params: <arg> can be any type 
+                       Result: Returns T if <arg> is a list,   
+                               otherwise returns NIL 
+
+   (SYMBOLP <arg>):    <arg> is evaluated
+                       Params: <arg> can be any type
+                       Result: Returns T if <arg> is a symbol,
+                               otherwise returns NIL 
+
+   (STRINGP <arg>):    <arg> is evaluated
+                       Params: <arg> can be any type
+                       Result: Returns T if <arg> is a string,
+                               otherwise returns NIL 
+
+   (NUMBERP <arg>):    <arg> is evaluated
+                       Params: <arg> can be any type
+                       Result: Returns T if <arg> is a number,
+                               otherwise returns NIL 
+
+   (RATIOP <arg>):     <arg> is evaluated
+                       Params: <arg> can be any type
+                       Result: Returns T if <arg> is a ratio,
+                               otherwise returns NIL
+
+   (FLOATP <arg>):     <arg> is evaluated
+                       Params: <arg> can be any type
+                       Result: Returns T if <arg> is a float,
+                               otherwise returns NIL
+
+   (INTEGERP <arg>):   <arg> is evaluated
+                       Params: <arg> can be any type
+                       Result: Returns T if <arg> is an integer,
+                               otherwise returns NIL
+
+   (RATIONAL <arg>):   <arg> is evaluated
+                       Params: <arg> can be any type
+                       Result: Returns T if <arg> is a ratio or
+                               integer, otherwise returns NIL
+
+
+                             SET FUNCTIONS
+
+
+   (ADJOIN <arg1> <arg2>):
+                       <arg1> <arg2> are evaluated
+                       Params: <arg2> must be a list
+                               <arg1> can be any type
+                       Result: Returns a copy of <arg2> with <arg1>
+                               as an additional element if it is not
+                               already present
+
+   (MEMBER <arg1> <arg2>):
+                       <arg1> <arg2> are evaluated
+                       Params: <arg2> must be a list
+                               <arg1> can be any type 
+                       Result: Returns NIL if <arg1> is not present
+                               in <arg2>, otherwise returns the
+                               portion of <arg2> starting with the
+                               first occurance of <arg1> 
+
+   (DISTINCTP <arg1> <arg2>):
+                       <arg1> <arg2> are evaluated 
+                       Params: <arg1> <arg2> must be lists 
+                       Result: Returns T if <arg1> is distinct from
+                               <arg2>, otherwise returns NIL 
+
+   (INTERSECTION <arg1> <arg2>):
+                       <arg1> <arg2> are evaluated 
+                       Params: <arg1> <arg2> must be lists 
+                       Result: Returns the intersection of <arg1>
+                               and <arg2> 
+
+   (SET-DIFFERENCE <arg1> <arg2>):
+                       <arg1> <arg2> are evaluated
+                       Params: <arg1> <arg2> must be lists
+                       Result: Returns the list of all elements of
+                               <arg1> that are not members of <arg2> 
+
+   (SET-EQUAL <arg1> <arg2>):
+                       <arg1> <arg2> are evaluated 
+                       Params: <arg1> <arg2> must be lists 
+                       Result: Returns T if all elements of <arg1>
+                               are elements of <arg2> and all  
+                               elements of <arg2> are elements of
+                               <arg1>, otherwise returns NIL
+
+   (SET-EXCLUSIVE-OR <arg1> <arg2>):
+                       <arg1> <arg2> are evaluated
+                       Params: <arg1> <arg2> must be lists
+                       Result: Returns a list of all elements of
+                               <arg1> that are not members of <arg2> 
+
+   (SUBSETP <arg1> <arg2>):
+                       <arg1> <arg2> are evaluated 
+                       Params: <arg1> <arg2> must be lists 
+                       Result: Returns T if all elements of <arg1>
+                               are elements of <arg2>, otherwise
+                               returns NIL
+
+   (UNION <arg1> <arg2>):
+                       <arg1> <arg2> are evaluated
+                       Params: <arg1> <arg2> must be lists
+                       Result: Returns the union of <arg1> and
+                               <arg2>
+
+
+                        PROPERTY LIST FUNCTIONS
+
+
+   (GETF <proplist> <prop>):
+                       <proplist> and <prop> are evaluated
+                       Params: <proplist> must be a list
+                               <prop> can be any type 
+                       Result: If <prop> is found in <proplist>, the
+                               element directly after it is    
+                               returned, otherwise NIL is returned. 
+
+   (GET <arg> <prop>):
+                       <arg> and <prop> are evaluated 
+                       Params: <arg> must be a symbol 
+                               <prop> can be any type 
+                       Result: If <prop> is found in <arg>'s   
+                               property list, the element directly
+                               after it is returned, otherwise NIL
+                               is returned.
+
+   (PUTPROP <arg> <prop> <val>):
+                       <arg> <prop> <val> are evaluated
+                       Params: <arg> must be a symbol
+                               <prop> <val> can be any type
+                       Result: <arg>'s property list is set to
+                               include the property <prop> with
+                               value <val>.  Returns <val>
+
+   (REMPROP <arg> <prop>):
+                       <arg> and <prop> are evaluated
+                       Params: <arg> must be a symbol
+                               <prop> can be any type
+                       Result: If <prop> is found in <arg>'s
+                               property list, the property is
+                               removed and the old value returned,
+                               otherwise NIL is returned.
+
+
+
+                           MAPPING FUNCTIONS
+
+
+   (MAPC <arg> <list>*):
+                       <arg> <list>* are evaluated
+                       Params: <arg> must be a function
+                               <list>* must be a list of parameters 
+                       Result: Returns the first <list>.  Applies
+                               <arg> to successive CAR's of <list>* 
+
+   (MAPCAR <arg> <list>*):
+                       <arg> <list>* are evaluated 
+                       Params: <arg> must be a function 
+                               <list>* must be a list of parameters 
+                       Result: Returns a list of the results of the
+                               applications.  Applies <arg> to
+                               successive CAR's of <list>* 
+
+   (MAPL <arg> <list>*):
+                       <arg> <list>* are evaluated 
+                       Params: <arg> must be a function 
+                               <list>* must be a list of parameters 
+                       Result: Returns the first <list>.  Applies
+                               <arg> to successive CDR's of <list>* 
+
+   (MAPLIST <arg> <list>*):
+                       <arg> <list>* are evaluated 
+                       Params: <arg> must be a function 
+                               <list>* must be a list of parameters 
+                       Result: Returns a list of the results of the
+                               applications.  Applies <arg> to
+                               successive CDR's of <list>* 
+
+
+                          NUMERICAL FUNCTIONS
+
+
+   * , MULT            : multiplication
+   + , PLUS            : addition
+   - , MINUS           : subtraction
+   (<op> <arg1> <arg2>):
+                       <op> represents one of the above operations 
+                       <arg1> <arg2> are evaluated 
+                       Params: <arg1> <arg2> must be numbers 
+                       Result: Returns the result of the operation
+                               on <arg1> and <arg2>.  Type is  
+                               preserved. 
+
+   (/ <arg1> <arg2>):  <arg1> <arg2> are evaluated
+                       Params: <arg1> <arg2> must be numbers
+                       Result: Returns the float result of <arg1>
+                               divided by <arg2> 
+
+   (DIV <arg1> <arg2>):
+                       <arg1> <arg2> are evaluated
+                       Params: <arg1> <arg2> must be rationals
+                       Result: Returns the rational result of <arg1>
+                               div <arg2> 
+
+   (MOD <arg1> <arg2>):
+                       <arg1> <arg2> are evaluated
+                       Params: <arg1> <arg2> must be integers
+                       Result: Returns the integer result of <arg1>
+                               mod <arg2> 
+
+   (NUMERATOR <arg>):  <arg> is evaluated
+                       Params: <arg> must be a ratio
+                       Result: Returns integer numerator of <arg>
+
+   (DENOMINATOR <arg>):
+                       <arg> is evaluated
+                       Params: <arg> must be a ratio
+                       Result: Returns integer denominator of <arg>
+
+   (ARCTAN <arg>):     <arg> is evaluated
+                       Params: <arg> must be a number
+                       Result: Returns the arctan of <arg>, in
+                               radians 
+
+   (SIN <arg>):        <arg> is evaluated
+                       Params: <arg> must be a number
+                       Result: Returns the sin of <arg>
+
+   (COS <arg>):        <arg> is evaluated
+                       Params: <arg> must be a number
+                       Result: Returns the cos of <arg>
+
+   (ABS <arg>):        <arg> is evaluated
+                       Params: <arg> must be a number
+                       Result: Returns the absolute value of <arg>
+
+   (EXP <arg>):        <arg> is evaluated
+                       Params: <arg> must be a number
+                       Result: Returns the exponential of <arg>,
+                               base e 
+
+   (LN <arg>):         <arg> is evaluated
+                       Params: <arg> must be a number
+                       Result: Returns the natural logarithm of
+                               <arg> 
+
+   (SQR <arg>):        <arg> is evaluated
+                       Params: <arg> must be a number
+                       Result: Returns <arg>*<arg>
+
+   (SQRT <arg>):       <arg> is evaluated
+                       Params: <arg> must be a number
+                       Result: Returns the square root of <arg>
+
+   (TRUNCATE <arg>):   <arg> is evaluated
+                       Params: <arg> must be a number
+                       Result: Returns <arg> truncated to an integer
+
+   (ROUND <arg>):      <arg> is evaluated
+                       Params: <arg> must be a number
+                       Result: Returns <arg> rounded to an integer
+
+   (FLOOR <arg>):      <arg> is evaluated
+                       Params: <arg> must be a number
+                       Result: Returns <arg> rounded down to an
+                               integer 
+
+   (CEILING <arg>):         <arg> is evaluated
+                       Params: <arg> must be a number
+                       Result: Returns <arg> rounded up to an  
+                               integer 
+
+   (GCD <arg1> <arg2>):
+                       <arg1> <arg2> are evaluated
+                       Params: <arg1> <arg2> must be integers
+                       Result: Returns the greatest common divisor
+                               of <arg1> and <arg2> 
+
+   (LOGAND <arg1> <arg2>):
+                       <arg1> <arg2> are evaluated
+                       Params: <arg1> <arg2> must be integers
+                       Result: Returns the bitwise logical and of
+                               <arg1> and <arg2> 
+
+   (LOGIOR <arg1> <arg2>):
+                       <arg1> <arg2> are evaluated
+                       Params: <arg1> <arg2> must be integers
+                       Result: Returns the bitwise logical or of
+                               <arg1> and <arg2>
+
+   (LOGXOR <arg1> <arg2>):
+                       <arg1> <arg2> are evaluated
+                       Params: <arg1> <arg2> must be integers
+                       Result: Returns the bitwise logical exclusive
+                               or of <arg1> and <arg2>
+
+   (LOGSHL <arg1> <arg2>):
+                       <arg1> <arg2> are evaluated
+                       Params: <arg1> <arg2> must be integers
+                       Result: Returns the bitwise shift left of
+                               <arg1> by <arg2> bits
+
+   (LOGSHR <arg1> <arg2>):
+                       <arg1> <arg2> are evaluated
+                       Params: <arg1> <arg2> must be integers
+                       Result: Returns the bitwise shift right of
+                               <arg1> by <arg2> bits 
+
+   (LOGNOT <arg>):     <arg> is evaluated
+                       Params: <arg> must be an integer
+                       Result: Returns the bitwise logical not of
+                               <arg> 
+
+   (RANDOM):           Result: Returns random float between 0 and 1
+
+   (EVENP <arg>):      <arg> is evaluated 
+                       Params: <arg> must be an integer
+                       Result: Returns T if <arg> is even, otherwise
+                               returns NIL 
+
+   (ODDP <arg>):       <arg> is evaluated
+                       Params: <arg> must be an integer
+                       Result: Returns T if <arg> is odd, otherwise
+                               returns NIL 
+
+   (PLUSP <arg>):      <arg> is evaluated
+                       Params: <arg> must be a number
+                       Result: Returns T if <arg> is positive,
+                               otherwise returns NIL 
+
+   (MINUSP <arg>):     <arg> is evaluated
+                       Params: <arg> must be a number
+                       Result: Returns T if <arg> is negative,
+                               otherwise returns NIL 
+
+   (ZEROP <arg>): <arg> is evaluated
+                       Params: <arg> must be a number
+                       Result: Returns T if <arg> is zero, otherwise
+                               returns NIL 
+
+
+               STRING AND SYMBOL MANIPULATION FUNCTIONS
+
+
+   (CHAR-INT <arg>):   <arg> is evaluated
+                       Params: <arg> must be a string
+                       Result: Returns the integer ascii value of
+                               the first character in <arg> 
+
+   (INT-CHAR <arg>):   <arg> is evaluated
+                       Params: <arg> must be an integer 
+                       Result: Returns a string of the character
+                               whose ascii value is <arg> 
+
+   (CONCAT <arg>*):    <arg>* are evaluated
+                       Params: <arg>* must be strings 
+                       Result: Returns a string concatenated of all
+                               <arg> strings 
+
+   (CONCAT-SYMBOL <arg>*):
+                       <arg>* are evaluated
+                       Params: <arg>* must be symbols
+                       Result: Returns a symbol concatenated of all
+                               <arg> symbol
+
+   (COPY <arg1> <arg2> <arg3>):
+                       <arg1> <arg2> <arg3> are evaluated
+                       Params: <arg1> must be a string
+                               <arg2> <arg3> must be integers 
+                       Result: Returns the substring of <arg1>
+                               <arg3> characters in length and
+                               starting with the <arg2>th character 
+
+   (LENGTH <arg>):     <arg> is evaluated
+                       Params: <arg> can be a list, string or symbol 
+                       Result: Returns the length of <arg> 
+
+   (STRING <arg>):     <arg> is evaluated
+                       Params: <arg> can be any type but a list 
+                       Result: Returns a string of <arg> 
+
+
+                           CONTROL FUNCTIONS
+
+
+   (AND <argi>*):      Result: <argi> are evaluated in order.  If
+                               the result of any <argi> is ever NIL,
+                               NIL is returned, otherwise the value
+                               of the last <argi> is returned 
+
+   (OR <argi>*):       Result: <argi> are evaluated in order and the
+                               first non-NIL result is returned 
+
+   (IF <test> <arg1> <arg2>):
+                       <test> is evaluated
+                       Result: If <test> is non-NIL then <arg1> is
+                               evaluated and the result is returned,
+                               otherwise <arg2> is evaluated and the
+                               result is returned 
+
+   (PROG1 <argi>*):    <argi> are evaluated
+                       Params: <argi> may be any type
+                       Result: Returns the value of <arg1>
+
+   (PROG2 <argi>*):    <argi> are evaluated
+                       Params: <argi> may be any type
+                       Result: Returns the value of <arg2>
+
+   (PROGN <argi>*):    <argi> are evaluated
+                       Params: <argi> may be any type
+                       Result: Returns the value of the last <argi>
+
+   (COND <form>*):     <form> represents a list of the form
+                       (<argi>*)
+                       Params: As stated above.  <argi>* may be any
+                               type
+                       Result: The first <argi> of each successive
+                               <form> is evaulated until one   
+                               evaluates to non-NIL.  If there are
+                               any remaining <argi>, they are  
+                               evaluated and the value of the last
+                               one is returned as the value of the
+                               COND, otherwise the value of the
+                               first <argi> is returned. 
+
+   (CASE  <key> <form>* [(OTHERWISE <arg*>)]):
+                  <form> represents a list of the form
+                  (<keylist> <arg>*)
+                  <key> is evaluated
+                  Params: <key> may be any type
+                          <keylist> must be a list 
+                          <arg>* can be any type 
+                  Result: The value of key is checked for membership
+                          in each successive <keylist>.  When  
+                          membership is determined or if the   
+                          optional OTHERWISE clause is reached,
+                          <argi> are evaluated and the value of the
+                          last one returned.  If membership fails in
+                          all the keylists and there is no OTHERWISE
+                          clause, NIL is returned. 
+
+   (DO ([(<sym> [<init> [<rep>]])*])
+       (<test> [<res>*])
+       [<arg>*]):
+                  New variables are created for each <sym> and
+                  values of <init> assigned to them.  <test> is
+                  evaluated, if non-NIL <res>* are evaluated and the
+                  value of the last one is returned as the value of
+                  the DO.  Otherwise, <arg>* are evaluated, <sym>
+                  are assigned values of <rep> and the whole process
+                  repeats.  Symbols in <arg> are ignored and treated
+                  as labels for GO statements which, along with
+                  RETURN statements, are legal in DO statements.
+
+   (LET ([(<sym> <init>)*]) <arg>*):
+                  New variables are created for each <sym> and are
+                  assigned the values of <init>.  <arg>* are then
+                  evaluated and the result of the last one is
+                  returned as the result of the LET statement.
+
+   (PROG ([(<sym> <init>)*])
+         [<arg>*]):
+                  New variables are created for each <sym> and
+                  values of <init> assigned to them. <arg> are
+                  evaluated.  If control reaches the end of the
+                  <arg>* NIL is returned as the value of the PROG
+                  statement.  Symbols in <arg>* are ignored and
+                  treated as labels for GO statements which, along
+                  with RETURN statements, are legal in PROG    
+                  statements. 
+
+   (GO <label>):  <label> is evaluated
+                  Params: <label> must be a symbol 
+                  Result: Returns NIL and causes execution to jump
+                          to <label> within PROG and DO stements
+
+   (RETURN <arg>):
+                  <arg> is evaluated
+                  Params: <label> can be any type 
+                  Result: Returns <arg> and causes execution of PROG
+                          and DO statements to stop and return <arg>
+                          as their value
+
+
+                     EVALUATION CONTROL FUNCTIONS
+
+
+   (BACKQUOTE <arg>):  Result: <arg> is returned, unevaluated except
+                               for COMMA or COMMA-AT elements. 
+
+   (COMMA <arg>):      only valid in BACKQUOTE statements
+                       Result: evaluates <arg> and returns it 
+
+   (COMMA-AT <arg>):   only valid in BACKQUOTE statements
+                       Result: evaluates <arg> and returns it.  If
+                               the result is a list, it is spliced
+                               into the BACKQUOTE <arg> 
+
+   (QUOTE <arg>):      Result: <arg> is returned, unevaluated
+
+   (SCOPE?):           Result: Returns STATIC or DYNAMIC depending
+                               on the current scoping convention
+
+   (DYNAMIC):          Result: Returns NIL.  Changes scoping   
+                               convention to dynamic 
+
+   (STATIC):           Result: Returns NIL.  Changes scoping   
+                               convention to static 
+
+   (EVAL <arg>):       <arg> is evaluated
+                       Result: Evaluates <arg> again and returns the
+                               result 
+
+   (APPLY <arg1> <arg2>):
+                       <arg1> <arg2> are evaluated
+                       Params: <arg1> must be a function
+                               <arg2> must be a list of arguments 
+                       Result: <arg1> is evaluated with the elements
+                               if <arg2> as arguments (quoted) and
+                               the result is returned 
+
+   (FUNCALL <arg1> [<argi>*]):
+                       <arg1> is evaluated
+                       Params: <arg1> must be a function
+                       Result: <arg1> is evaluated with <argi>* as
+                               arguments and the result is returned 
+
+   (MACROEXPAND <arg>):
+                       <arg> is evaluated 
+                       Params: <arg> must be a valid macro call 
+                       Result: Returns the un-evaluated macro  
+                               expansion of <arg> 
+
+
+                    DEBUGGING AND SYSTEM FUNCTIONS
+
+
+   (BREAK <arg1> <arg2> <arg3>):
+                       <arg1> <arg2> <arg3> are evaluated
+                       Params: <arg1> must be a string
+                               <arg2> <arg3> can be any type 
+                       Result: Enters the next highest error loop.
+                               <arg1> is an error message, <arg2> is
+                               the erred expresion, and <arg3> is an
+                               expression to be evaluated when
+                               CONTINUEd.  Returns NIL. 
+
+   (CONTINUE):         Exit to the next level and re-evaluate the
+                       erred expression. 
+
+   (ERROR):            Result: Returns NIL.  Displays the current
+                               error message 
+
+   (EXIT [<arg>]):     Exit to the next level.  If <arg> is supplied
+                       it is evaluated and return as the result,
+                       otherwise NIL is returned.
+
+   (TOP):              Return to the top level
+
+   (EVALSTACK):        Result: Returns NIL.  Displays the contents
+                               of the evaluation stack 
+
+   (FUNCTION-LIST):    Result: Returns a list of defined functions
+
+   (MACRO-LIST):       Result: Returns a list of defined macros
+
+   (VARIABLE-LIST):    Result: Returns a list of all defined symbols
+                               with a structure showing the scope.
+                               Globals are in the outermost list. 
+
+   (SYMBOL-FUNCTION <arg>):
+                       <arg> is evaluated 
+                       Params: <arg> must be a symbol
+                       Result: Returns the function-closure
+                               attatched to <arg>
+
+   (SYMBOL-MACRO <arg>):
+                       <arg> is evaluated
+                       Params: <arg> must be a symbol
+                       Result: Returns the macro-closure attatched
+                               to <arg>
+
+   (SYMBOL-LIST <arg>):
+                       <arg> is evaluated
+                       Params: <arg> must be a symbol
+                       Result: Returns the property list of <arg>
+    
+   (SYMBOL-VALUE <arg>):
+                       <arg> is evaluated
+                       Params: <arg> must be a symbol
+                       Result: Returns the value of <arg>
+    
+   (GC):               Returns NIL.  Forces garbage collection. 
+    
+   (ROOM):             Returns NIL.  Show memory information. 
+    
+   (FLUSHMEM):         Returns NIL.  Trashes the entire heap.  All
+                       values are lost.
+
+
+                        INPUT/OUTPUT FUNCTIONS
+
+
+   (READ):             Result: An expression is read from the user
+                               and returned.
+
+   (PRIN1 <arg>):      <arg> is evaluated
+                       Params: <arg> can be any type
+                       Result: Returns <arg>.  <arg> is written to
+                               the screen.
+
+   (PRINT <arg>):      <arg> is evaluated
+                       Params: <arg> can be any type
+                       Result: Returns <arg>.  A newline, <arg>, and
+                               a space are written to the screen.
+
+   (TERPRI):           Result: Returns NIL.  A newline is written to
+                               the screen.
